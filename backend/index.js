@@ -40,3 +40,22 @@ app.listen(port, () => {
 
 //api
 app.use('/api/user/auth', authRouter)
+
+
+app.use((err, req, res, next) => {
+
+    const status = err?.status || 500
+    const errorMsg = err?.error?.errorResponse?.errmsg || "error msg"
+    const error = err?.error || "something went wrong"
+    const otherInfo = err?.otherInfo || "other info"
+
+    return res.status(status).send({
+        success: false,
+        status,
+        errorMsg,
+        error,
+        otherInfo
+
+    })
+
+})
