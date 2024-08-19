@@ -74,6 +74,7 @@ const SignUp = () => {
 
   useEffect(() => {
 
+    //timer object
     let timer 
     if(error || success){
       timer = setTimeout(() => {
@@ -103,7 +104,7 @@ const SignUp = () => {
         <input type="password" required = {true} name="password" id="password" className="p-3 rounded-lg" placeholder="password" value={formData.password} onChange={handleFieldChange}/>
 
         <button disabled = {loading} type="submit" className="bg-slate-600 text-white p-3 rounded-lg uppercase
-        hover:bg-opacity-80 disabled:bg-opacity-45">{loading ? "signing..." : "sign up"}</button>
+        hover:bg-opacity-80 disabled:bg-opacity-45">{loading ? "signing...up" : "sign up"}</button>
 
       </form>
 
