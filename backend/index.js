@@ -1,9 +1,22 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import mongoose from 'mongoose'
 
 const app = express()
 dotenv.config() //load environment variables
+
+//connect to mongo db
+mongoose.connect(process.env.MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log("connected to mongo db successfully")
+})
+.catch((error) => {
+    console.log("error connecting to mongo db", error)
+})
 
 
 //some middlewares
