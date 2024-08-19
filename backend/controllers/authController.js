@@ -5,6 +5,9 @@ import { errorHandler } from "../utils/errorHandler.js";
 export const signUp = async (req, res, next) => {
 	const { username, email, password } = req.body;
 
+
+    console.log("req body:", req.body)
+
 	try {
 		//check if the user already exists
 		const existingUser = await User.findOne({ email: email });
@@ -27,3 +30,4 @@ export const signUp = async (req, res, next) => {
 		return next(errorHandler(500, error));
 	}
 };
+
