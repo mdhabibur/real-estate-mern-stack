@@ -6,7 +6,7 @@ export const errorMsg = (error) => {
     if(error === null) {
         return ""
     }
-    return <div className="bg-red-500 font-semibold text-lg rounded-lg p-3 mx-5 mt-4">{error}</div>
+    return <div className="bg-red-500 font-semibold text-yellow-200 text-lg rounded-lg p-3 mx-5 mt-4">{error}</div>
 }
 
 export const successMsg = (success) => {

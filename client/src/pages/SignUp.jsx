@@ -32,7 +32,7 @@ const SignUp = () => {
     try {
 
       setLoading(true)
-      const res = await fetch('http://localhost:5000/api/user/auth/signup', {
+      const res = await fetch('/api/user/auth/signup', {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(formData)
