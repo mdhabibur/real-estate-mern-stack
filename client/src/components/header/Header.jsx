@@ -2,8 +2,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa'
+import { useSelector } from "react-redux";
 
 const Header = () => {
+
+	const {currentUser} = useSelector((state) => state.auth)
+
+	
 	return (
 		<header className="bg-slate-200 shadow-md">
 			<div className=" max-w-6xl flex mx-auto items-center border  bg-slate-200 justify-between p-3 gap-3">
@@ -33,6 +38,7 @@ const Header = () => {
 					<Link to="/about" className="hidden sm:inline hover:underline text-slate-700">About</Link>
 
 					<Link to="/signin" className="hover:underline text-slate-700">Sign In</Link>
+
 
 				</nav>
 			</div>

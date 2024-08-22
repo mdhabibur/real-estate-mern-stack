@@ -89,3 +89,77 @@ export const signIn = async (req, res, next) => {
 };
 
 
+export const googleAuthSign  = async (req, res, next) => {
+
+	let {username, email, password, avatar} = req.body
+
+	try {
+		const userExists = await User.findOne({email: email})
+		if(userExists){
+			//sign in
+
+			console.log("came to sign in backend")
+
+			try{
+				const payload = {
+					userId: userExists._id,
+					email: userExists.email
+				}
+	
+				const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: "24h"})
+	
+				res.cookie('token',token, {httpOnly: true})
+	
+				const {password, ...rest} = userExists._doc
+	
+				return res.status(200).send({
+					message: 'user login successful',
+					user: rest
+				})
+			}
+			catch(error) {
+				console.log("google auth error: ", error)
+				return next(errorHandler(500, "google auth sign in failed BE"))
+			}
+
+
+
+		}else {
+			//sign up]
+
+			console.log("came to sign up backend")
+
+
+			try {
+
+				password = Math.random().toString(36)
+
+				//hash the password
+				const hashedPassword = await bcrypt.hash(password, 10);
+
+				//create a new user
+				const newUser = new User({ username, email, password: hashedPassword, avatar });
+				const newSavedUser = await newUser.save();
+				return res.status(201).send({
+				newSavedUser,
+				message: "user registration successful by google auth",
+				});
+
+				
+			} catch (error) {
+
+				console.log("google auth error: ", error)
+				return next(errorHandler(500, "google auth sign up failed BE"))
+				
+			}
+
+		}
+		
+	} catch (error) {
+		console.log("google auth error: ", error)
+		return next(errorHandler(500, "google auth failed BE"))
+		
+	}
+
+}
+

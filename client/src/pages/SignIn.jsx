@@ -4,6 +4,7 @@ import { errorMsg, loadingMsg, successMsg } from "../utils/messages"
 import { useDispatch, useSelector } from "react-redux"
 import { signInUser } from "../redux/auth/authApi.jsx"
 import { setTimerOff } from "../redux/auth/authSlice"
+import GoogleAuth from "../components/header/GoogleAuth.jsx"
 
 const SignIn = () => {
 
@@ -31,7 +32,8 @@ const SignIn = () => {
 
     try {
 
-      dispatch(signInUser(formData))
+      //email sign in
+      dispatch(signInUser({url: "/api/user/auth/signin" ,formData:formData}))
       
     } catch (error) {
       //frontend error
@@ -77,8 +79,10 @@ const SignIn = () => {
 
         <input type="password" required = {true} name="password" id="password" className="p-3 rounded-lg" placeholder="password" value={formData.password} onChange={handleFieldChange}/>
 
-        <button disabled = {loading} type="submit" className="bg-slate-600 text-white p-3 rounded-lg uppercase
-        hover:bg-opacity-80 disabled:bg-opacity-45">{loading ? "signing...in" : "sign in"}</button>
+        <button disabled = {loading} type="submit" className="bg-slate-600 text-white p-3 rounded-lg uppercase font-semibold text-lg
+        hover:bg-opacity-80 disabled:bg-opacity-50">{loading ? "signing...in" : "sign in"}</button>
+
+        <GoogleAuth />
 
       </form>
 

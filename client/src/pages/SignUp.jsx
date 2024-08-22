@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { errorMsg, loadingMsg, successMsg } from "../utils/messages.jsx"
+import GoogleAuth from "../components/header/GoogleAuth.jsx"
+import { useSelector } from "react-redux"
 
 const SignUp = () => {
-
 
   const [formData, setFormData] = useState({
     username: '',
@@ -91,6 +92,7 @@ const SignUp = () => {
   }, [error, success])
 
 
+
   return (
     <div className="border border-4 border-slate-200 rounded-lg shadow-lg p-3 m-3 max-w-xs sm:max-w-xl  mx-auto">
       <h1 className="text-center pb-2 font-semibold text-3xl">Sign Up</h1>
@@ -103,8 +105,10 @@ const SignUp = () => {
 
         <input type="password" required = {true} name="password" id="password" className="p-3 rounded-lg" placeholder="password" value={formData.password} onChange={handleFieldChange}/>
 
-        <button disabled = {loading} type="submit" className="bg-slate-600 text-white p-3 rounded-lg uppercase
-        hover:bg-opacity-80 disabled:bg-opacity-45">{loading ? "signing...up" : "sign up"}</button>
+        <button disabled = {loading} type="submit" className="bg-slate-600 text-white p-3 rounded-lg uppercase font-semibold text-lg
+        hover:bg-opacity-80 disabled:bg-opacity-50">{loading ? "signing...up" : "sign up"}</button>
+
+        <GoogleAuth />
 
       </form>
 
