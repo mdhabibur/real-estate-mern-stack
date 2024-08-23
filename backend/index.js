@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import authRouter from './routes/authRouter.js'
+import userProfileRouter from './routes/userProfileRouter.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 dotenv.config() //load environment variables
@@ -24,6 +26,9 @@ mongoose.connect(process.env.MONGODB_URL, {
 app.use(cors()) //to enable cross origin request
 app.use(express.json()) //to parse json data request
 
+//for parsing cookie
+app.use(cookieParser())
+
 
 
 
@@ -40,6 +45,7 @@ app.listen(port, () => {
 
 //api
 app.use('/api/user/auth', authRouter)
+app.use('/api/user/profile', userProfileRouter)
 
 
 app.use((err, req, res, next) => {

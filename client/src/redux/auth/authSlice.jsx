@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signInUser } from "./authApi.jsx";
+import { signInUser, updateUserProfile } from "./authApi.jsx";
 
 
 const initialState = {
@@ -35,6 +35,23 @@ const authSlice = createSlice({
 
             })
             .addCase(signInUser.rejected, (state, action) => {
+                state.loading = false
+                state.success = null
+                state.error = action.payload
+
+            })
+            .addCase(updateUserProfile.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(updateUserProfile.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = null
+                state.currentUser = action.payload.updatedUser
+                state.success = action.payload.message
+
+            })
+            .addCase(updateUserProfile.rejected, (state, action) => {
                 state.loading = false
                 state.success = null
                 state.error = action.payload
