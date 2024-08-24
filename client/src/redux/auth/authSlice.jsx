@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signInUser, updateUserProfile } from "./authApi.jsx";
+import { signInUser, updateUserProfile, signOut, deleteUser } from "./authApi.jsx";
 
 
 const initialState = {
@@ -13,9 +13,6 @@ const authSlice = createSlice({
     name: 'auth', 
     initialState,
     reducers: {
-        signOut: (state) => {
-            state.currentUser = null 
-        },
         setTimerOff: (state) => {
             state.error = null
             state.success = null
@@ -57,9 +54,43 @@ const authSlice = createSlice({
                 state.error = action.payload
 
             })
+            .addCase(signOut.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(signOut.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = null
+                state.currentUser = null
+                state.success = action.payload.message
+
+            })
+            .addCase(signOut.rejected, (state, action) => {
+                state.loading = false
+                state.success = null
+                state.error = action.payload
+
+            })
+            .addCase(deleteUser.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteUser.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = null
+                state.currentUser = null
+                state.success = action.payload.message
+
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
+                state.loading = false
+                state.success = null
+                state.error = action.payload
+
+            })
     }
 
 })
 
-export const {signOut, setTimerOff} = authSlice.actions
+export const {setTimerOff} = authSlice.actions
 export default authSlice.reducer

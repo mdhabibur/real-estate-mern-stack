@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import { updateUserProfile } from "../redux/auth/authApi"
+import { updateUserProfile, signOut, deleteUser } from "../redux/auth/authApi"
 import { errorMsg, loadingMsg, successMsg } from "../utils/messages"
 import { setTimerOff } from "../redux/auth/authSlice"
+import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
 
   const {loading, error, success, currentUser} = useSelector((state) => state.auth)
   const fileInputRef = useRef(null)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     username: '',
@@ -145,6 +147,18 @@ const Profile = () => {
   console.log("formData: ", formData)
 
 
+  const signOutUser = async (e) => {
+    dispatch(signOut({url: '/api/user/profile/signout'}))
+      
+  }
+
+  const deleteUserProfile = async (e) => {
+    dispatch(deleteUser({url: `/api/user/profile/delete/${currentUser._id}`}))
+
+  }
+
+
+
   return (
     <div className="flex flex-col border border-slate-200 border-4 rounded-lg shadow-lg text-center p-5 gap-3 max-w-xs sm:max-w-xl mx-auto my-3">
 
@@ -171,19 +185,16 @@ const Profile = () => {
 
         <button className="bg-slate-600 rounded-lg p-3 text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50">update</button>
 
-        <button className="bg-green-600 rounded-lg p-3 text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50">create listing</button>
+        <button onClick={handleCreateListing} type="button" className="bg-green-600 rounded-lg p-3 text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50">create listing</button>
 
         <div className="flex justify-between">
-          <button type="button" className="bg-slate-600 rounded-lg py-3 px-5 text-center text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50">Delete Account</button>
+          <button type="button" className="bg-slate-600 rounded-lg py-3 px-5 text-center text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50" onClick={deleteUserProfile}>Delete Account</button>
 
-          <button type="button" className="bg-slate-600 rounded-lg py-3 px-5 text-center text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50">Sign Out</button>
+          <button type="button" className="bg-slate-600 rounded-lg py-3 px-5 text-center text-white text-lg uppercase font-semibold hover:opacity-80 disabled:opacity-50" onClick={signOutUser}>Sign Out</button>
         </div>
-
-
 
       
       </form>
-
 
       {loading && loadingMsg()}
       {error && errorMsg(error)}

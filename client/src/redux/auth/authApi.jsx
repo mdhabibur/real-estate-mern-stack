@@ -1,68 +1,109 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
-
 export const signInUser = createAsyncThunk(
-    'auth/signInUser',
-    async (credentials, {rejectWithValue}) => {
+	"auth/signInUser",
+	async (credentials, { rejectWithValue }) => {
+		try {
+			const response = await fetch(credentials.url, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(credentials.formData),
+				credentials: "include",
+			});
 
-        try {
-            const response = await fetch(credentials.url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(credentials.formData),
-                credentials: 'include'
-            })
+			const data = await response.json();
 
-            const data =  await response.json()
+			console.log("data: ", data);
 
-            console.log("data: ", data)
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "Sign in failed");
+			}
 
-            if(data.success === false){
-                return rejectWithValue(data?.error || 'Sign in failed')
-            }
-
-            return data
-            
-        } catch (error) {
-            console.log("error: ", error)
-            return rejectWithValue('an error occurred during sign-in in CE')
-           
-            
-        }
-
-    }
-
-)
-
+			return data;
+		} catch (error) {
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during sign-in in CE");
+		}
+	}
+);
 
 export const updateUserProfile = createAsyncThunk(
-    'auth/updateUserProfile',
-    async(credentials, {rejectWithValue}) => {
-        try {
+	"auth/updateUserProfile",
+	async (credentials, { rejectWithValue }) => {
+		try {
+			const response = await fetch(credentials.url, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(credentials.formData),
+			});
+
+			const data = await response.json();
+			console.log("updated profile: ", data);
+
+			//backend error response
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "profile update failed");
+			}
+
+			//backend success
+			return data;
+		} catch (error) {
+			//frontend error
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during profile update in FE");
+		}
+	}
+);
+
+export const signOut = createAsyncThunk(
+	"auth/signOut",
+	async (credentials, { rejectWithValue }) => {
+		try {
+			const response = await fetch(credentials.url);
+
+			const data = await response.json();
+			console.log("signed out: ", data);
+
+			//backend error response
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "signed out failed");
+			}
+
+			//backend success
+			return data;
+		} catch (error) {
+			//frontend error
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during signed out in FE");
+		}
+	}
+);
+
+
+export const deleteUser = createAsyncThunk(
+	"auth/deleteUser",
+	async (credentials, { rejectWithValue }) => {
+		try {
             const response = await fetch(credentials.url, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(credentials.formData)
-            })
+				method: "DELETE",
+			});
 
-            const data = await response.json()
-            console.log("updated profile: ", data)
 
-            //backend error response
-            if(data.success === false){
-                return rejectWithValue(data?.error || 'profile update failed')
-            }
+			const data = await response.json();
+			console.log("user delete: ", data);
 
-            //backend success
-            return data
+			//backend error response
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "user delete failed");
+			}
 
-        } catch (error) {
-            //frontend error
-            console.log("error: ", error)
-            return rejectWithValue('an error occurred during profile update in CE')
+			//backend success
+			return data;
+		} catch (error) {
+			//frontend error
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during user delete in FE");
+		}
+	}
+);
 
-            
-        }
-    }
-)

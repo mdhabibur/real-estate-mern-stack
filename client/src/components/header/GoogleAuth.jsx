@@ -19,13 +19,19 @@ const GoogleAuth = () => {
 		avatar: "",
 	});
 
+	const [googleAuthClicked, setGoogleAuthClicked] = useState(false)
+
 	const dispatch = useDispatch();
     const navigate = useNavigate()
 
 	const handleGoogleAuth = async (e) => {
+
+		setGoogleAuthClicked(true)
+
 		try {
 			const result = await signInWithPopup(auth, googleProvider);
 			console.log("google auth: ", result);
+
 
 			setFormData({
 				...formData,
@@ -44,7 +50,7 @@ const GoogleAuth = () => {
 
         if (formData.email) {
 
-            console.log("signInUser is dispatched");
+            console.log("signInUser by google auth is dispatched");
 
             dispatch(
                 signInUser({
@@ -61,7 +67,8 @@ const GoogleAuth = () => {
     useEffect(() => {
         let timer 
 
-        if(error || success){
+        if(googleAuthClicked && (error || success)){
+			console.log("goole auth clicked and then error or success is run")
 
             if(success){
                 dispatch(setTimerOff())
@@ -78,7 +85,7 @@ const GoogleAuth = () => {
         //clear timer on unmount
         return () => clearTimeout(timer)
 
-    }, [error, success])
+    }, [error, success, googleAuthClicked])
 
 	return (
 		<>
@@ -91,9 +98,9 @@ const GoogleAuth = () => {
 				{console.log("fromData: ", formData)}
 			</button>
 
-            {loading && loadingMsg()}
-            {error && errorMsg(error)}
-            {success && successMsg(success)}
+            {googleAuthClicked && loading && loadingMsg()}
+            {googleAuthClicked && error && errorMsg(error)}
+            {googleAuthClicked && success && successMsg(success)}
 
 
 		</>

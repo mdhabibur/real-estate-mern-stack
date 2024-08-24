@@ -63,3 +63,58 @@ export const updateUserProfile = async (req, res, next) => {
 		return next(errorHandler(500, "profile update failed BE"));
 	}
 };
+
+export const signOutUser = async (req, res, next) => {
+
+    try {
+        res.clearCookie("token", {
+            httpOnly: true
+        })
+
+        return res.status(200).send({
+			message: "user signed out successfully",
+			user: {},
+
+		});
+        
+    } catch (error) {
+        console.log("sign out error: ", error)
+        return next(errorHandler(500, "error in signing out BE"))
+        
+    }
+}
+
+
+export const deleteUserProfile = async (req, res, next) => {
+
+    const userIdFromParams = req.params.id
+
+    try {
+        if(req.user.userId !== userIdFromParams){
+            return next(errorHandler(401, "you are only allowed to delete your own account"))
+        }
+
+        const deletedUser = await User.findByIdAndDelete(userIdFromParams)
+
+        if(!deletedUser){
+            return next(errorHandler(500, "failed to found or delete the user"))
+        }
+
+        res.clearCookie('token', {
+            httpOnly: true
+        })
+
+        return res.status(200).send({
+			message: "user profile deleted successfully",
+			user: deletedUser,
+
+		});
+
+        
+    } catch (error) {
+        console.log("profile delete error: ", error)
+        return next(errorHandler(500, "error in deleting user profile BE"))
+        
+    }
+
+}

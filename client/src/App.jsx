@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import Header from "./components/header/Header";
 import PrivateRoute from "./components/privateRoutes/PrivateRoute";
 import PublicRoute from "./components/privateRoutes/PublicRoute";
+import CreateListing from "./pages/CreateListing";
 
 function App() {
 	return (
@@ -23,18 +24,19 @@ function App() {
 						</PrivateRoute>
 					}
 				/>
-				<Route path="/about" element={<About />} />
+
 				<Route
-					path="/signin"
+					path="/create/listing"
 					element={
-						<SignIn />
-						
+						<PrivateRoute>
+							<CreateListing />
+						</PrivateRoute>
 					}
 				/>
-				<Route
-					path="/signup"
-					element={<SignUp />}
-				/>
+
+				<Route path="/about" element={<About />} />
+				<Route path="/signin" element={<SignIn />} />
+				<Route path="/signup" element={<SignUp />} />
 			</Routes>
 		</Router>
 	);
