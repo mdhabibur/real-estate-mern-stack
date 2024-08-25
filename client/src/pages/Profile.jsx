@@ -157,6 +157,9 @@ const Profile = () => {
 
   }
 
+  const handleCreateListing = () => {
+    navigate('/listing/create')
+  }
 
 
   return (

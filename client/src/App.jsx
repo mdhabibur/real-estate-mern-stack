@@ -26,7 +26,7 @@ function App() {
 				/>
 
 				<Route
-					path="/create/listing"
+					path="/listing/create"
 					element={
 						<PrivateRoute>
 							<CreateListing />

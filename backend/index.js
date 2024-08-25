@@ -4,6 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import authRouter from './routes/authRouter.js'
 import userProfileRouter from './routes/userProfileRouter.js'
+import userListingRouter from './routes/userListingRouter.js'
 import cookieParser from 'cookie-parser'
 
 const app = express()
@@ -46,6 +47,7 @@ app.listen(port, () => {
 //api
 app.use('/api/user/auth', authRouter)
 app.use('/api/user/profile', userProfileRouter)
+app.use('/api/user/listing', userListingRouter)
 
 
 app.use((err, req, res, next) => {
