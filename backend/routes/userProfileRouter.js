@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.put('/update/:id', validateRequestToken, updateUserProfile)
 
-router.get('/signout', validateRequestToken ,signOutUser)
+router.get('/signout' ,signOutUser)
 
 router.delete('/delete/:id', validateRequestToken ,deleteUserProfile)
 

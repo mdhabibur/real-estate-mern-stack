@@ -22,7 +22,7 @@ export const signInUser = createAsyncThunk(
 			return data;
 		} catch (error) {
 			console.log("error: ", error);
-			return rejectWithValue("an error occurred during sign-in in CE");
+			return rejectWithValue("an error occurred during sign-in in FE");
 		}
 	}
 );

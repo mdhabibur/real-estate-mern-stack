@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { errorHandler } from "../utils/errorHandler.js";
 import jwt  from 'jsonwebtoken'
+import { generateToken } from "../utils/generateToken.js";
 
 export const signUp = async (req, res, next) => {
 	const { username, email, password } = req.body;
@@ -70,7 +71,8 @@ export const signIn = async (req, res, next) => {
 
 
 		//sign the token
-		const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: '24h'})
+		// const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: '24h'})
+		const token = await generateToken(payload)
 
 		//set the token in a http only cookie
 		res.cookie('token', token, {httpOnly: true})
@@ -78,6 +80,7 @@ export const signIn = async (req, res, next) => {
 		return res.status(200).send({
 			message: "user login successful",
 			user: currentUser,
+			token: token
 		});
 
 
@@ -106,7 +109,8 @@ export const googleAuthSign  = async (req, res, next) => {
 					email: userExists.email
 				}
 	
-				const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: "24h"})
+				// const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: "24h"})
+				const token = await generateToken(payload)
 	
 				res.cookie('token',token, {httpOnly: true})
 	
@@ -114,7 +118,8 @@ export const googleAuthSign  = async (req, res, next) => {
 	
 				return res.status(200).send({
 					message: 'user login successful',
-					user: rest
+					user: rest,
+					token: token
 				})
 			}
 			catch(error) {
@@ -140,8 +145,22 @@ export const googleAuthSign  = async (req, res, next) => {
 				//create a new user
 				const newUser = new User({ username, email, password: hashedPassword, avatar });
 				const newSavedUser = await newUser.save();
+
+				const payload = {
+					userId: newSavedUser._id,
+					email: newSavedUser.email
+				}
+	
+				// const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: "24h"})
+				const token = await generateToken(payload)
+	
+				res.cookie('token',token, {httpOnly: true})
+
+				const {password: passwordToNotSend, ...rest} = newSavedUser._doc
+
+
 				return res.status(201).send({
-				newSavedUser,
+				user: rest,
 				message: "user registration successful by google auth",
 				});
 

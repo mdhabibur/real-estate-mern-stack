@@ -64,3 +64,59 @@ export const createListing = async (req, res, next) => {
   }
 };
 
+
+
+export const getListings = async (req, res, next) => {
+
+  try {
+
+    const listings = await Listing.find({user: req.user.userId})
+
+    if(!listings){
+      return next(errorHandler(400, "no listings found"))
+    }
+
+    return res.status(200).send({ message: 'Listing fetched successfully!', listings: listings});
+    
+  } catch (error) {
+
+    console.error('Error fetching listing:', error);
+    return next(errorHandler(500, 'listing fetching failed BE.'));
+    
+  }
+  
+
+}
+
+export const deleteListing = async (req, res, next) => {
+
+  const listingId = req.params.listingId
+  
+  try {
+
+    const listing = await Listing.findById(listingId)
+
+    if(!listing){
+      return next(errorHandler(400, "no listing found"))
+    }
+
+    //now check that the one who want to delete the listing actually he uploaded that listing
+
+    //req.user.userId is a string value decoded from jwt token and listing.user is an object id
+    if(req.user.userId !== listing.user.toString()){
+      return next(errorHandler(401, "not allowed to delete others listing"))
+    }
+
+    const listingDeleted = await Listing.findByIdAndDelete(listingId).populate('user')
+
+    return res.status(201).send({ message: 'Listing deleted successfully!', listing: listingDeleted, requestedUser: req.user.userId, listingCreator: listing.user});
+    
+  } catch (error) {
+
+    console.error('Error deleting listing:', error);
+    return next(errorHandler(500, 'listing deleting failed BE.'));
+    
+  }
+
+}
+

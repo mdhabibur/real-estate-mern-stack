@@ -63,12 +63,14 @@ const GoogleAuth = () => {
 
     }, [formData.email])
 
+	
+
 
     useEffect(() => {
         let timer 
 
         if(googleAuthClicked && (error || success)){
-			console.log("goole auth clicked and then error or success is run")
+			console.log("google auth clicked and then error or success is run")
 
             if(success){
                 dispatch(setTimerOff())
@@ -101,6 +103,9 @@ const GoogleAuth = () => {
             {googleAuthClicked && loading && loadingMsg()}
             {googleAuthClicked && error && errorMsg(error)}
             {googleAuthClicked && success && successMsg(success)}
+
+
+			{console.log("google auth current user:", currentUser)}
 
 
 		</>

@@ -17,6 +17,14 @@ export const validateRequestToken = async(req, res, next) => {
         const decodedUser = jwt.verify(token, process.env.JWT_SECRET_KEY)
 
         console.log('decoded token: ', decodedUser)
+
+        //check if the token is expired
+        const currentTimeInSec = Math.floor(Date.now() / 1000)
+        if(decodedUser && decodedUser.exp < currentTimeInSec){
+            return next(errorHandler(401, "token expired"))
+        }
+
+
         req.user = decodedUser
 
         //proceed to next middleware

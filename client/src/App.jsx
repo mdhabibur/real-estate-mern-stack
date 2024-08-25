@@ -9,6 +9,7 @@ import Header from "./components/header/Header";
 import PrivateRoute from "./components/privateRoutes/PrivateRoute";
 import PublicRoute from "./components/privateRoutes/PublicRoute";
 import CreateListing from "./pages/CreateListing";
+import ListingDetails from "./pages/listingDetails";
 
 function App() {
 	return (
@@ -30,6 +31,15 @@ function App() {
 					element={
 						<PrivateRoute>
 							<CreateListing />
+						</PrivateRoute>
+					}
+				/>
+
+				<Route
+					path="/listing/:listingId"
+					element={
+						<PrivateRoute>
+							<ListingDetails />
 						</PrivateRoute>
 					}
 				/>

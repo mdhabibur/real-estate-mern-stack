@@ -454,6 +454,7 @@ const CreateListing = () => {
 
        { console.log('Uploaded URLs:', imgUrls)}
 
+    
 
     </div>
   )
