@@ -5,6 +5,17 @@ import { errorMsg, loadingMsg, successMsg } from '../utils/messages'
 import { FaMapMarkerAlt, FaBed, FaBath, FaParking, FaChair  } from 'react-icons/fa'
 import { FaShareFromSquare } from "react-icons/fa6";
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
+
 
 const ListingDetails = () => {
 
@@ -128,7 +139,28 @@ const ListingDetails = () => {
         </div>
 
 
-        <img className='w-full max-h-[650px] mx-auto object-cover rounded-lg' src={formData.images[0]} alt="listing image" />
+
+        <Swiper 
+          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          spaceBetween={50}
+          slidesPerView={1}
+          navigation
+          pagination = {{ clickable: true }}
+          scrollbar = {{ draggable: true }}
+          onSlideChange={() => console.log('slide changed')}
+          onSwiper={(swiper) => console.log(swiper)}
+          >
+
+            {formData.images.map((image, index) => (
+              <SwiperSlide key={index}>
+                <img className='w-full max-h-[650px] mx-auto object-cover rounded-lg' src={image} alt={`listing image in slide ${index}`} />
+              </SwiperSlide>
+            ))}
+
+
+        </Swiper>
+
+
       </div>
 
       <div className='flex flex-col gap-5 my-3 p-3 max-w-2xl mx-auto border-4 border-green-100 shadow-lg rounded-lg'>
