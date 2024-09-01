@@ -64,6 +64,31 @@ export const createListing = async (req, res, next) => {
   }
 };
 
+export const updatedListing = async (req, res, next) => {
+
+  const listingId = req.params.listingId
+  try {
+    const listingToUpdate = await Listing.findById(listingId)
+    if(!listingToUpdate){
+      return next(404, "listing not found")
+    }
+    if(req.user.userId !== listingToUpdate.user.toString()){
+      return next(401, "not allowed to update others listing")
+    }
+
+    const updatedListing = await Listing.findByIdAndUpdate(listingId, req.body, {new: true})
+    
+    return res.status(201).send({ message: 'Listing updated successfully!', listing: updatedListing });
+
+  } catch (error) {
+
+    console.error('Error updating listing:', error);
+    return next(errorHandler(500, 'listing update failed BE.'));
+    
+  }
+
+}
+
 
 
 export const getListings = async (req, res, next) => {
@@ -73,10 +98,30 @@ export const getListings = async (req, res, next) => {
     const listings = await Listing.find({user: req.user.userId})
 
     if(!listings){
-      return next(errorHandler(400, "no listings found"))
+      return next(errorHandler(404, "no listings found"))
     }
 
-    return res.status(200).send({ message: 'Listing fetched successfully!', listings: listings});
+    return res.status(200).send({ message: 'Listings fetched successfully!', listings: listings});
+    
+  } catch (error) {
+
+    console.error('Error fetching listings:', error);
+    return next(errorHandler(500, 'listings fetching failed BE.'));
+    
+  }
+  
+
+}
+
+export const getListingDetails = async (req, res, next) => {
+
+  try {
+    const listing = await Listing.findById(req.params.listingId)
+    if(!listing){
+      return next(errorHandler(404, "listing not found"))
+    }
+
+    return res.status(200).send({ message: 'Listing fetched successfully!', listing: listing});
     
   } catch (error) {
 
@@ -84,7 +129,7 @@ export const getListings = async (req, res, next) => {
     return next(errorHandler(500, 'listing fetching failed BE.'));
     
   }
-  
+
 
 }
 

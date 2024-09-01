@@ -319,8 +319,8 @@ const Profile = () => {
 				))}
 			</div>
 
-      {/* delete listing messages  */}
-      {deleteListingsLoading && loadingMsg()}
+			{/* delete listing messages  */}
+			{deleteListingsLoading && loadingMsg()}
 			{deleteListingsError && errorMsg(deleteListingsError)}
 			{deleteListingsSuccess && successMsg(deleteListingsSuccess)}
 

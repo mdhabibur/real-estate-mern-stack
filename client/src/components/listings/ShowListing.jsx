@@ -22,10 +22,18 @@ const dispatch = useDispatch()
                 <h4 className='font-semibold text-lg flex-1 mx-3'>{listing.name}</h4>
             </Link>
 
+
             <div className='flex flex-col gap-3'>
-                <button onClick={() => handleDeleteListing(listing._id)} className='uppercase text-red-600 font-semibold'>Delete</button>
+
+            <Link to ={`/listing/edit/${listing._id}`} className="">
                 <button className='uppercase text-green-600 font-semibold'>Edit</button>
+            </Link>
+
+            <button onClick={() => handleDeleteListing(listing._id)} className='uppercase text-red-600 font-semibold'>Delete</button>
+
             </div>
+
+
 
         </div>
 

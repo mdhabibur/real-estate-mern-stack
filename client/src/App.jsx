@@ -10,6 +10,7 @@ import PrivateRoute from "./components/privateRoutes/PrivateRoute";
 import PublicRoute from "./components/privateRoutes/PublicRoute";
 import CreateListing from "./pages/CreateListing";
 import ListingDetails from "./pages/listingDetails";
+import UpdateListing from "./pages/UpdateListing";
 
 function App() {
 	return (
@@ -31,6 +32,15 @@ function App() {
 					element={
 						<PrivateRoute>
 							<CreateListing />
+						</PrivateRoute>
+					}
+				/>
+
+				<Route
+					path="/listing/edit/:listingId"
+					element={
+						<PrivateRoute>
+							<UpdateListing />
 						</PrivateRoute>
 					}
 				/>
