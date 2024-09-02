@@ -11,6 +11,7 @@ import PublicRoute from "./components/privateRoutes/PublicRoute";
 import CreateListing from "./pages/CreateListing";
 import ListingDetails from "./pages/listingDetails";
 import UpdateListing from "./pages/UpdateListing";
+import Search from "./pages/Search";
 
 function App() {
 	return (
@@ -50,6 +51,15 @@ function App() {
 					element={
 						<PrivateRoute>
 							<ListingDetails />
+						</PrivateRoute>
+					}
+				/>
+
+				<Route
+					path="/search"
+					element={
+						<PrivateRoute>
+							<Search />
 						</PrivateRoute>
 					}
 				/>

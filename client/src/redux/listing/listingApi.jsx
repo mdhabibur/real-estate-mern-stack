@@ -20,7 +20,7 @@ export const getListings = createAsyncThunk(
 		} catch (error) {
 			console.log("error: ", error);
 			return rejectWithValue("an error occurred during fetching listing in FE");
-		}
+		}	
 	}
 );
 

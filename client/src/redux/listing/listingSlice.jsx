@@ -42,6 +42,7 @@ const listing = createSlice({
 				state.getListingsSuccess = null;
 				state.getListingsError = action.payload;
 			})
+			
 			.addCase(deleteListing.pending, (state) => {
 				state.deleteListingsLoading = true;
 				state.deleteListingsError = null;

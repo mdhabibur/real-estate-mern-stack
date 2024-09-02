@@ -1,5 +1,5 @@
 import express from 'express'
-import { createListing, getListings, getListingDetails, updatedListing, deleteListing } from '../controllers/userListingController.js'
+import { createListing, getListings, getListingDetails, updatedListing, deleteListing, searchListings } from '../controllers/userListingController.js'
 import { validateRequestToken } from '../utils/validateRequestToken.js'
 
 const router = express.Router()
@@ -9,8 +9,13 @@ router.get('/get', validateRequestToken, getListings)
 router.put('/edit/:listingId', validateRequestToken, updatedListing)
 router.delete('/delete/:listingId', validateRequestToken, deleteListing )
 
+//advance search
+router.get('/search', validateRequestToken, searchListings)
+
 //single listing 
 router.get('/:listingId', validateRequestToken, getListingDetails)
+
+
 
 
 

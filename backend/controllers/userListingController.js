@@ -113,6 +113,34 @@ export const getListings = async (req, res, next) => {
 
 }
 
+
+export const searchListings = async (req, res, next) => {
+
+  try {
+    const listings = await Listing.find({})
+
+    if(!listings) {
+      return next(errorHandler(404, "no listings found"))
+    }
+
+    return res.status(200).send({
+      message: 'Listings fetched successfully!',
+      listings: listings
+    })
+    
+  } catch (error) {
+
+    console.error('Error fetching search listings:', error);
+    return next(errorHandler(500, 'listings fetching failed BE.'));
+    
+  }
+
+
+
+}
+
+
+
 export const getListingDetails = async (req, res, next) => {
 
   try {
