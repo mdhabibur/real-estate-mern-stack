@@ -1,11 +1,50 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const Header = () => {
 	const { currentUser } = useSelector((state) => state.auth);
+
+	const navigate = useNavigate()
+
+	const [formData, setFormData] = useState({
+		searchTerm: ""
+	})
+
+	const handleInputField = (e) => {
+		
+		setFormData((prevData) => ({...prevData, searchTerm: e.target.value}))
+
+	}
+
+	const handleSearchBoxSubmit = (e) => {
+		e.preventDefault()
+
+		const urlSearchParams = new URLSearchParams(formData).toString()
+
+		console.log("urlSearchParams: ", urlSearchParams)
+
+		navigate(`/search?${urlSearchParams}`)
+
+	}
+
+	useEffect(() => {
+		const queryParams = window.location.search
+		console.log("query params: ", queryParams)
+		const queryParamsIteratorObj = new URLSearchParams(queryParams)
+		const queryParamsObj = Object.fromEntries(queryParamsIteratorObj.entries())
+
+		setFormData((prevData) => ({...prevData, searchTerm: queryParamsObj.searchTerm || ""}))
+
+
+
+	}, [window.location.search])
+
+
+
+	console.log("formData: ", formData)
 
 	return (
 		<header className="bg-slate-200 shadow-md">
@@ -19,13 +58,15 @@ const Header = () => {
 					</Link>
 				</div>
 
-				<form className="bg-slate-100 p-3 rounded-lg">
+				<form className="bg-slate-100 p-3 rounded-lg" onSubmit={handleSearchBoxSubmit}>
 					<input
 						type="text"
 						placeholder="Search..."
 						className="bg-transparent w-24 sm:w-64 focus:outline-none"
+						value={formData.searchTerm}
+						onChange={handleInputField}
 					/>
-					<button>
+					<button type="submit">
 						<FaSearch />
 					</button>
 				</form>

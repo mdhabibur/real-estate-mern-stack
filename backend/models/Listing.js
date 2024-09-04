@@ -66,7 +66,7 @@ const ListingSchema = new mongoose.Schema({
     required: true
  }, // Reference to the User model
 
-});
+}, {timestamps: true});
 
 const Listing = mongoose.model('Listing', ListingSchema);
 

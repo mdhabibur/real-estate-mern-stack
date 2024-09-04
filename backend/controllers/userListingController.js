@@ -117,15 +117,112 @@ export const getListings = async (req, res, next) => {
 export const searchListings = async (req, res, next) => {
 
   try {
-    const listings = await Listing.find({})
+    const queryParams = req.query
+    console.log("query params: ", queryParams)
 
-    if(!listings) {
+    /*
+    queryParams object is like the following object: 
+    {
+        "searchTerm": "modern3",
+        "type": "rentOrSale",
+        "parking": "false",
+        "furnished": "true",
+        "offer": "false",
+        "sortBy": "oldest"
+    }
+
+    */
+
+    const {searchTerm, type, parking, furnished, offer, sortBy} = queryParams
+
+    let query = {}
+
+    if(searchTerm && searchTerm !== undefined && searchTerm !== "undefined" && searchTerm !== ""){
+      query.name = {$regex: searchTerm, $options: 'i'}
+    }
+
+    if(type){
+      if(type !== "rentOrSale" && type !== "undefined" && type !== undefined && type !== "false"){
+        query.sellOrRent = type
+      }
+      else {
+        query.sellOrRent = {$in: ["rent", "sell"]}
+      }
+    }else {
+      query.sellOrRent = {$in: ["rent", "sell"]}
+    }
+
+    if(parking && parking !== "undefined" && parking !== undefined && parking !== "false"){
+      query.parking = parking === true || parking === 'true'
+    }
+
+    else {
+      query.parking = {$in: [true, false]}
+    }
+
+
+
+    if(furnished && furnished !== "undefined" && furnished !== undefined && furnished !== "false"){
+      query.furnished = furnished === true || furnished === 'true'
+    }
+
+    else {
+      query.furnished = {$in: [true, false]}
+    }
+
+
+    if(offer && offer !== "undefined" && offer !== undefined && offer !== "false"){
+      query.offer = offer === true || offer === 'true'
+    }
+    else {
+      query.offer = {$in: [true, false]}
+    }
+
+
+
+    let sortOptions = {}
+
+    if(sortBy && sortBy !== "undefined" && sortBy !== undefined && sortBy !== "false"){
+      
+      if(sortBy === 'price-low-to-high'){
+        sortOptions.regularPrice = 1 //ascending order
+      }
+      else if(sortBy === 'price-high-to-low'){
+        sortOptions.regularPrice = -1 //descending order
+      }
+      else if(sortBy === 'latest'){
+        sortOptions.createdAt = -1 //descending
+      }
+      else if(sortBy === 'oldest'){
+        sortOptions.createdAt = 1
+      }
+
+    }else {
+      if(sortBy === 'undefined' || sortBy === undefined){
+
+        //the default "price-high-to-low" sent from client
+        sortOptions.regularPrice = -1 //descending order
+
+
+      }
+      else {
+        //the another default
+        sortOptions.createdAt = -1 //latest
+
+      }
+    }
+  
+    const listings = await Listing.find(query).sort(sortOptions)
+
+    if(!listings || listings.length === 0) {
       return next(errorHandler(404, "no listings found"))
     }
 
     return res.status(200).send({
       message: 'Listings fetched successfully!',
-      listings: listings
+      listings: listings,
+      queryParams,
+      listingSize: listings.length
     })
     
   } catch (error) {
@@ -145,6 +242,7 @@ export const getListingDetails = async (req, res, next) => {
 
   try {
     const listing = await Listing.findById(req.params.listingId)
+
     if(!listing){
       return next(errorHandler(404, "listing not found"))
     }

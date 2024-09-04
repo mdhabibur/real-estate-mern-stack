@@ -24,6 +24,10 @@ const listing = createSlice({
 			state.deleteListingsError = null;
 			state.deleteListingsSuccess = null;
 		},
+
+		resetListings: (state) => {
+			state.listings = []
+		}
 	},
 	extraReducers: (builder) => {
 		builder
@@ -62,5 +66,5 @@ const listing = createSlice({
 	},
 });
 
-export const { setListingTimerOff } = listing.actions;
+export const { setListingTimerOff, resetListings } = listing.actions;
 export default listing.reducer;

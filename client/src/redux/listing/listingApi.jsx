@@ -4,9 +4,25 @@ export const getListings = createAsyncThunk(
 	"listing/getListings",
 	async (credentials, { rejectWithValue }) => {
 		try {
-			const response = await fetch(credentials.url, {
-				method: "GET",
-			});
+
+			//the same getListings function is for advance search query for get listings and normal /api/user/listings/get for showing a user's listing when showListing btn is clicked
+
+			let response; 
+
+			if(credentials.queryParams){
+
+				const url = credentials.url
+				const urlWithQueryParams = `${url}/${credentials.queryParams}`
+				response = await fetch(urlWithQueryParams, {
+					method: "GET",
+				});
+
+			}else {
+				response = await fetch(credentials.url, {
+					method: "GET",
+				})
+			}
+
 
 			const data = await response.json();
 
