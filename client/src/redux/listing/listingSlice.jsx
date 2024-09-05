@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deleteListing, getListings } from "./listingApi.jsx";
+import { deleteListing, getListingDetails, getListings } from "./listingApi.jsx";
 
 const initialState = {
 	listings: [],
 	getListingsLoading: false,
 	getListingsError: null,
 	getListingsSuccess: null,
+
+	listing: {},
+	fetchListingLoading: false,
+	fetchListingError: null,
+	fetchListingSuccess: null,
 
 	deleteListingsLoading: false,
 	deleteListingsError: null,
@@ -20,6 +25,9 @@ const listing = createSlice({
 		setListingTimerOff: (state) => {
 			state.getListingsError = null;
 			state.getListingsSuccess = null;
+
+			state.fetchListingError = null;
+			state.fetchListingSuccess = null;
 			
 			state.deleteListingsError = null;
 			state.deleteListingsSuccess = null;
@@ -46,6 +54,24 @@ const listing = createSlice({
 				state.getListingsSuccess = null;
 				state.getListingsError = action.payload;
 			})
+
+
+			.addCase(getListingDetails.pending, (state) => {
+				state.fetchListingLoading = true;
+				state.fetchListingError = null;
+			})
+			.addCase(getListingDetails.fulfilled, (state, action) => {
+				state.fetchListingLoading = false;
+				state.fetchListingError = null;
+				state.listing = action.payload.listing;
+				state.fetchListingSuccess = action.payload.message;
+			})
+			.addCase(getListingDetails.rejected, (state, action) => {
+				state.fetchListingLoading = false;
+				state.fetchListingSuccess = null;
+				state.fetchListingError = action.payload;
+			})
+
 			
 			.addCase(deleteListing.pending, (state) => {
 				state.deleteListingsLoading = true;

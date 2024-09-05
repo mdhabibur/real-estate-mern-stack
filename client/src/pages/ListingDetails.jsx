@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { errorMsg, loadingMsg, successMsg } from '../utils/messages'
 import { FaMapMarkerAlt, FaBed, FaBath, FaParking, FaChair  } from 'react-icons/fa'
@@ -14,18 +14,18 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import { getListingDetails } from '../redux/listing/listingApi'
+import { setListingTimerOff } from '../redux/listing/listingSlice'
 
 
 
 const ListingDetails = () => {
 
   const {currentUser} = useSelector((state) => state.auth)
-
-  const [fetchListingLoading, setFetchListingLoading] = useState(false)
-  const [fetchListingError, setFetchListingError] = useState(null)
-  const [fetchListingSuccess, setFetchListingSuccess] = useState(null)
+  const {listing, fetchListingLoading, fetchListingError, fetchListingSuccess} = useSelector((state) => state.listing)
 
   const [currentUrlCopied, setCurrentUrlCopied] = useState(false)
+  const dispatch = useDispatch()
 
 
   const {listingId} = useParams()
@@ -53,33 +53,8 @@ const ListingDetails = () => {
   useEffect(() => {
 
       const fetchListing = async (listingId) => {
-          try {
-          
-             setFetchListingLoading(true)
-             const response = await fetch(`/api/user/listing/${listingId}`,{
-                  method: "GET"
-              })
-              const data = await response.json()
-
-              if(data.success === false){
-                  setFetchListingLoading(false)
-                  setFetchListingError(data?.error || "error fetching listing FE")
-                  return
-              }
-
-              setFetchListingLoading(false)
-              setFetchListingSuccess(data?.message || "fetched listing successful")
-
-              setFormData(data.listing)
-              console.log("listing: ", data)
-              
-          } catch (error) {
-              setFetchListingLoading(false)
-              setFetchListingError(error || "error fetching listing FE")
-              
-          }
-
-
+        dispatch(getListingDetails({url: `/api/user/listing/${listingId}`}))
+        setFormData(listing)
       }
 
       fetchListing(listingId)
@@ -93,8 +68,7 @@ const ListingDetails = () => {
     if(fetchListingError || fetchListingSuccess){
 
       timer = setTimeout(() => {
-        setFetchListingError(null)
-        setFetchListingSuccess(null)
+        dispatch(setListingTimerOff())
       }, 3000)
     }
 
@@ -118,7 +92,7 @@ const ListingDetails = () => {
       }, 3000)
 
     })
-    .catch((err) => console.log("failed to share the url",error))
+    .catch((err) => console.log("failed to share the url", err))
 
   }
 
@@ -133,8 +107,9 @@ const ListingDetails = () => {
     <div>
 
       <div className='relative self-center w-full'>
-        <div className='absolute top-10 right-10 flex flex-col items-center p-3 gap-3'>
-          <FaShareFromSquare  size={40} className='text-gray-500 cursor-pointer ' onClick={handleShareClick}/>
+
+        <div className='absolute top-10 right-10 flex flex-col items-center p-3 gap-3 z-10'>
+          <FaShareFromSquare  size={40} className='text-yellow-600 cursor-pointer ' onClick={handleShareClick}/>
           <span className='text-lg font-semibold text-violet-600'>{currentUrlCopied ? "Copied!" : " "}</span>
         </div>
 
@@ -151,7 +126,7 @@ const ListingDetails = () => {
           onSwiper={(swiper) => console.log(swiper)}
           >
 
-            {formData.images.map((image, index) => (
+            {formData?.images.map((image, index) => (
               <SwiperSlide key={index}>
                 <img className='w-full max-h-[650px] mx-auto object-cover rounded-lg' src={image} alt={`listing image in slide ${index}`} />
               </SwiperSlide>
@@ -176,8 +151,12 @@ const ListingDetails = () => {
           <span className='text-xl font-semibold text-green-700'> {formData.address}</span>
         </div>
 
-        <div>
+        <div className='flex flex-row gap-3'>
           <button className='bg-red-800 px-10 py-1 rounded-lg uppercase font-semibold text-white'>{formData.sellOrRent}</button>
+
+          {formData.offer && (<button className='bg-green-700 px-10 py-1 rounded-lg uppercase font-semibold text-white'>$ {+formData.regularPrice - +formData.discountedPrice} Discount</button>)}
+
+
         </div>
 
         <div className='flex gap-3'>
@@ -233,6 +212,17 @@ const ListingDetails = () => {
 
 
         </div>
+
+        {console.log("current singed in user: " , currentUser?._id?.toString())}
+        {console.log("listing owner: ", listing?.user?.toString())}
+
+        {!currentUser?._id?.toString() === listing?.user?.toString() && (
+          <div>
+
+            "show contact landlord box"
+
+          </div>
+        )}
 
 
       </div>
