@@ -31,22 +31,22 @@ const ListingDetails = () => {
   const {listingId} = useParams()
   console.log("listing id: ", listingId)
 
-  const [formData, setFormData] = useState({
-      name: '',
-      description: '',
-      address: '',
-      sellOrRent: '',
-      parking: false,
-      furnished: false,
-      offer: false,
-      beds: 1,
-      baths: 1,
-      regularPrice: '',
-      discountedPrice: '',
-      images: [],
-      userRef: ''
+  // const [formData, setFormData] = useState({
+  //     name: '',
+  //     description: '',
+  //     address: '',
+  //     sellOrRent: '',
+  //     parking: false,
+  //     furnished: false,
+  //     offer: false,
+  //     beds: 1,
+  //     baths: 1,
+  //     regularPrice: '',
+  //     discountedPrice: '',
+  //     images: [],
+  //     userRef: ''
 
-  })
+  // })
 
 
   //get the listing when the page mounts
@@ -54,7 +54,7 @@ const ListingDetails = () => {
 
       const fetchListing = async (listingId) => {
         dispatch(getListingDetails({url: `/api/user/listing/${listingId}`}))
-        setFormData(listing)
+        // setFormData(listing)
       }
 
       fetchListing(listingId)
@@ -78,7 +78,7 @@ const ListingDetails = () => {
 
   }, [fetchListingError, fetchListingSuccess ])
 
-  console.log("form data: ", formData)
+  // console.log("form data: ", formData)
 
   const handleShareClick = (e) => {
     console.log("window: ", window)
@@ -126,7 +126,7 @@ const ListingDetails = () => {
           onSwiper={(swiper) => console.log(swiper)}
           >
 
-            {formData?.images.map((image, index) => (
+            {listing && listing?.images?.map((image, index) => (
               <SwiperSlide key={index}>
                 <img className='w-full max-h-[650px] mx-auto object-cover rounded-lg' src={image} alt={`listing image in slide ${index}`} />
               </SwiperSlide>
@@ -141,27 +141,27 @@ const ListingDetails = () => {
       <div className='flex flex-col gap-5 my-3 p-3 max-w-2xl mx-auto border-4 border-green-100 shadow-lg rounded-lg'>
 
         <div className='flex gap-3 flex-wrap'>
-        <h4 className='font-bold text-xl'>{formData.name} - $</h4>
-        <h4 className='font-bold text-xl'> {formData.regularPrice}</h4>
-        <h4 className='font-bold text-xl'> {formData.sellOrRent === 'rent' ? '/ month' : ""}</h4>
+        <h4 className='font-bold text-xl'>{listing.name} - $</h4>
+        <h4 className='font-bold text-xl'> {listing.regularPrice}</h4>
+        <h4 className='font-bold text-xl'> {listing.sellOrRent === 'rent' ? '/ month' : ""}</h4>
         </div>
 
         <div className='flex gap-3 items-center'>
           <FaMapMarkerAlt size={25} color='green' />
-          <span className='text-xl font-semibold text-green-700'> {formData.address}</span>
+          <span className='text-xl font-semibold text-green-700'> {listing.address}</span>
         </div>
 
         <div className='flex flex-row gap-3'>
-          <button className='bg-red-800 px-10 py-1 rounded-lg uppercase font-semibold text-white'>{formData.sellOrRent}</button>
+          <button className='bg-red-800 px-10 py-1 rounded-lg uppercase font-semibold text-white'>{listing.sellOrRent}</button>
 
-          {formData.offer && (<button className='bg-green-700 px-10 py-1 rounded-lg uppercase font-semibold text-white'>$ {+formData.regularPrice - +formData.discountedPrice} Discount</button>)}
+          {listing.offer && (<button className='bg-green-700 px-10 py-1 rounded-lg uppercase font-semibold text-white'>$ {+listing.regularPrice - +listing.discountedPrice} Discount</button>)}
 
 
         </div>
 
         <div className='flex gap-3'>
           <span className='font-semibold'>Description - </span>
-          <span>{formData.description}</span>
+          <span>{listing.description}</span>
         </div>
 
         <div>
@@ -173,8 +173,8 @@ const ListingDetails = () => {
               <div className='flex gap-2 items-center'>
 
                 <FaBed size={20} />
-                <span>{formData.beds}</span>
-                <span>{formData.beds > 1 ? "beds" : "bed"}</span>
+                <span>{listing.beds}</span>
+                <span>{listing.beds > 1 ? "beds" : "bed"}</span>
 
               </div>
             </li>
@@ -183,8 +183,8 @@ const ListingDetails = () => {
               <div className='flex gap-2 items-center'>
 
                 <FaBath size={20} />
-                <span>{formData.baths}</span>
-                <span>{formData.baths > 1 ? "baths" : "bath"}</span>
+                <span>{listing.baths}</span>
+                <span>{listing.baths > 1 ? "baths" : "bath"}</span>
 
               </div>
             </li>
@@ -193,7 +193,7 @@ const ListingDetails = () => {
               <div className='flex gap-2 items-center'>
 
                 <FaParking size={20} />
-                <span>{formData.parking ? "Parking" : "No Parking"}</span>
+                <span>{listing.parking ? "Parking" : "No Parking"}</span>
 
               </div>
             </li>
@@ -203,7 +203,7 @@ const ListingDetails = () => {
               <div className='flex gap-2 items-center'>
 
                 <FaChair size={20} />
-                <span>{formData.furnished ? "Furnished" : "Not Furnished"}</span>
+                <span>{listing.furnished ? "Furnished" : "Not Furnished"}</span>
               </div>
             </li>
 
@@ -216,7 +216,7 @@ const ListingDetails = () => {
         {console.log("current singed in user: " , currentUser?._id?.toString())}
         {console.log("listing owner: ", listing?.user?.toString())}
 
-        {!currentUser?._id?.toString() === listing?.user?.toString() && (
+        {currentUser?._id?.toString() !== listing?.user?.toString() && (
           <div>
 
             "show contact landlord box"
