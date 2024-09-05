@@ -24,6 +24,31 @@ export const getListings = createAsyncThunk(
 	}
 );
 
+export const getListingDetails = createAsyncThunk(
+	"listing/getListingDetails",
+	async (credentials, { rejectWithValue }) => {
+
+		try {
+			const response = await fetch(credentials.url, {
+				method: "GET",
+			});
+
+			const data = await response.json();
+
+			console.log("data: ", data);
+
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "fetching listing details failed");
+			}
+
+			return data;
+		} catch (error) {
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during fetching listing details in FE");
+		}
+	}
+);
+
 export const deleteListing = createAsyncThunk(
 	"listing/deleteListing",
 	async (credentials, { rejectWithValue }) => {
