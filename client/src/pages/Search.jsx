@@ -24,7 +24,8 @@ const Search = () => {
         parking: false,
         furnished: false,
         offer: false,
-        sortBy: ""
+        sortBy: "",
+		limit: 0
 
     })
 
@@ -70,6 +71,8 @@ const Search = () => {
 		dispatch(resetListings())
 
         console.log("query string from url: ", window.location.search)
+
+
         const queryParamsFromUrl = new URLSearchParams(window.location.search)
         console.log("querySearchParamsObj: ", queryParamsFromUrl)
         const queryObject = Object.fromEntries(queryParamsFromUrl.entries())
@@ -82,7 +85,8 @@ const Search = () => {
             parking: queryObject.parking,
             furnished: queryObject.furnished,
             offer: queryObject.offer,
-            sortBy: queryObject.sortBy
+            sortBy: queryObject.sortBy,
+			limit: queryObject.limit
 
         }))
 
@@ -261,7 +265,7 @@ const Search = () => {
 
 				{getListingsLoading && loadingMsg()}
 				{getListingsError && errorMsg(getListingsError)}
-				{getListingsSuccess && successMsg(getListingsSuccess)}
+				{/* {getListingsSuccess && successMsg(getListingsSuccess)} */}
 
 
 

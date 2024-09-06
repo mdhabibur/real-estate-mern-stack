@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deleteListing, getListingDetails, getListings } from "./listingApi.jsx";
+import { deleteListing, getListingDetails, getListings, getRecentOfferListings, getRecentRentListings, getRecentSellListings } from "./listingApi.jsx";
 
 const initialState = {
 	listings: [],
@@ -11,6 +11,22 @@ const initialState = {
 	fetchListingLoading: false,
 	fetchListingError: null,
 	fetchListingSuccess: null,
+
+	recentOfferListings: [],
+	getRecentOfferListingsLoading: false,
+	getRecentOfferListingsError: null,
+	getRecentOfferListingsSuccess: null,
+
+	recentRentListings: [],
+	getRecentRentListingsLoading: false,
+	getRecentRentListingsError: null,
+	getRecentRentListingsSuccess: null,
+
+	recentSellListings: [],
+	getRecentSellListingsLoading: false,
+	getRecentSellListingsError: null,
+	getRecentSellListingsSuccess: null,
+	
 
 	deleteListingsLoading: false,
 	deleteListingsError: null,
@@ -56,6 +72,66 @@ const listing = createSlice({
 			})
 
 
+
+
+			.addCase(getRecentOfferListings.pending, (state) => {
+				state.getRecentOfferListingsLoading = true;
+				state.getRecentOfferListingsError = null;
+			})
+			.addCase(getRecentOfferListings.fulfilled, (state, action) => {
+				state.getRecentOfferListingsLoading = false;
+				state.getRecentOfferListingsError = null;
+				state.recentOfferListings = action.payload.listings;
+				state.getRecentOfferListingsSuccess = action.payload.message;
+			})
+			.addCase(getRecentOfferListings.rejected, (state, action) => {
+				state.getRecentOfferListingsLoading = false;
+				state.getRecentOfferListingsSuccess = null;
+				state.getRecentOfferListingsError = action.payload;
+			})
+
+
+
+
+			.addCase(getRecentRentListings.pending, (state) => {
+				state.getRecentRentListingsLoading = true;
+				state.getRecentRentListingsError = null;
+			})
+			.addCase(getRecentRentListings.fulfilled, (state, action) => {
+				state.getRecentRentListingsLoading = false;
+				state.getRecentRentListingsError = null;
+				state.recentRentListings = action.payload.listings;
+				state.getRecentRentListingsSuccess = action.payload.message;
+			})
+			.addCase(getRecentRentListings.rejected, (state, action) => {
+				state.getRecentRentListingsLoading = false;
+				state.getRecentRentListingsSuccess = null;
+				state.getRecentRentListingsError = action.payload;
+			})
+
+
+
+//
+			.addCase(getRecentSellListings.pending, (state) => {
+				state.getRecentSellListingsLoading = true;
+				state.getRecentSellListingsError = null;
+			})
+			.addCase(getRecentSellListings.fulfilled, (state, action) => {
+				state.getRecentSellListingsLoading = false;
+				state.getRecentSellListingsError = null;
+				state.recentSellListings = action.payload.listings;
+				state.getRecentSellListingsSuccess = action.payload.message;
+			})
+			.addCase(getRecentSellListings.rejected, (state, action) => {
+				state.getRecentSellListingsLoading = false;
+				state.getRecentSellListingsSuccess = null;
+				state.getRecentSellListingsError = action.payload;
+			})
+
+
+
+
+
 			.addCase(getListingDetails.pending, (state) => {
 				state.fetchListingLoading = true;
 				state.fetchListingError = null;
@@ -71,6 +147,8 @@ const listing = createSlice({
 				state.fetchListingSuccess = null;
 				state.fetchListingError = action.payload;
 			})
+
+
 
 			
 			.addCase(deleteListing.pending, (state) => {

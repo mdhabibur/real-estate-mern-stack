@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const SingleListingCardView = ({ index, listing }) => {
 	return (
-		<div className="bg-white rounded-lg shadow-lg w-full sm:max-w-[350px] flex flex-col gap-5 overflow-hidden border-2 border-yellow-200">
+		<div className="bg-white rounded-lg shadow-lg w-full sm:max-w-[350px] flex flex-col gap-5 overflow-hidden border-0 border-yellow-200">
 
             <Link to={`/listing/${listing._id}`}>
                 <img
@@ -15,7 +15,7 @@ const SingleListingCardView = ({ index, listing }) => {
                 />
             </Link>
 
-			<div className="flex flex-col gap-3 px-3 py-5">
+			<div className="flex flex-col gap-3 px-3 py-5 text-start">
 
             <Link to={`/listing/${listing._id}`}>
                 <span className="text-2xl font-semibold hover:underline">{listing.name}</span>

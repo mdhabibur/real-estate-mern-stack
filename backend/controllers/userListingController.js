@@ -133,7 +133,7 @@ export const searchListings = async (req, res, next) => {
 
     */
 
-    const {searchTerm, type, parking, furnished, offer, sortBy} = queryParams
+    const {searchTerm, type, parking, furnished, offer, sortBy, limit} = queryParams
 
     let query = {}
 
@@ -212,7 +212,7 @@ export const searchListings = async (req, res, next) => {
       }
     }
   
-    const listings = await Listing.find(query).sort(sortOptions)
+    const listings = await Listing.find(query).sort(sortOptions).limit(Number(limit) || 0)
 
     if(!listings || listings.length === 0) {
       return next(errorHandler(404, "no listings found"))

@@ -11,8 +11,10 @@ export const getListings = createAsyncThunk(
 
 			if(credentials.queryParams){
 
+				console.log("query params: ", credentials.queryParams)
+
 				const url = credentials.url
-				const urlWithQueryParams = `${url}/${credentials.queryParams}`
+				const urlWithQueryParams = `${url}${credentials.queryParams}`
 				response = await fetch(urlWithQueryParams, {
 					method: "GET",
 				});
@@ -36,6 +38,133 @@ export const getListings = createAsyncThunk(
 		} catch (error) {
 			console.log("error: ", error);
 			return rejectWithValue("an error occurred during fetching listing in FE");
+		}	
+	}
+);
+
+export const getRecentOfferListings = createAsyncThunk(
+	"listing/getRecentOfferListings",
+	async (credentials, { rejectWithValue }) => {
+		try {
+
+			//the same getListings function is for advance search query for get listings and normal /api/user/listings/get for showing a user's listing when showListing btn is clicked
+
+			let response; 
+
+			if(credentials.queryParams){
+
+				console.log("query params: ", credentials.queryParams)
+
+				const url = credentials.url
+				const urlWithQueryParams = `${url}${credentials.queryParams}`
+				response = await fetch(urlWithQueryParams, {
+					method: "GET",
+				});
+
+			}else {
+				response = await fetch(credentials.url, {
+					method: "GET",
+				})
+			}
+
+
+			const data = await response.json();
+
+			console.log("data: ", data);
+
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "fetching offer listing failed");
+			}
+
+			return data;
+		} catch (error) {
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during fetching offer listing in FE");
+		}	
+	}
+);
+
+
+export const getRecentRentListings = createAsyncThunk(
+	"listing/getRecentRentListings",
+	async (credentials, { rejectWithValue }) => {
+		try {
+
+			//the same getListings function is for advance search query for get listings and normal /api/user/listings/get for showing a user's listing when showListing btn is clicked
+
+			let response; 
+
+			if(credentials.queryParams){
+
+				console.log("query params: ", credentials.queryParams)
+
+				const url = credentials.url
+				const urlWithQueryParams = `${url}${credentials.queryParams}`
+				response = await fetch(urlWithQueryParams, {
+					method: "GET",
+				});
+
+			}else {
+				response = await fetch(credentials.url, {
+					method: "GET",
+				})
+			}
+
+
+			const data = await response.json();
+
+			console.log("data: ", data);
+
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "fetching rent offer listing failed");
+			}
+
+			return data;
+		} catch (error) {
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during fetching rent offer listing in FE");
+		}	
+	}
+);
+
+export const getRecentSellListings = createAsyncThunk(
+	"listing/getRecentSellListings",
+	async (credentials, { rejectWithValue }) => {
+		try {
+
+			//the same getListings function is for advance search query for get listings and normal /api/user/listings/get for showing a user's listing when showListing btn is clicked
+
+			let response; 
+
+			if(credentials.queryParams){
+
+				console.log("query params: ", credentials.queryParams)
+
+				const url = credentials.url
+				const urlWithQueryParams = `${url}${credentials.queryParams}`
+				response = await fetch(urlWithQueryParams, {
+					method: "GET",
+				});
+
+			}else {
+				response = await fetch(credentials.url, {
+					method: "GET",
+				})
+			}
+
+
+			const data = await response.json();
+
+			console.log("data: ", data);
+
+			if (data.success === false) {
+				return rejectWithValue(data?.error || "fetching rent offer listing failed");
+			}
+
+			return data;
+		} catch (error) {
+			console.log("error: ", error);
+			return rejectWithValue("an error occurred during fetching rent offer listing in FE");
 		}	
 	}
 );
