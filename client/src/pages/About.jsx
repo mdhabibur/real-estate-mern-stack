@@ -3,7 +3,7 @@ const About = () => {
   return (
     <div className="flex flex-col gap-5 max-w-5xl mx-auto my-10">
 
-      <h4 className="font-bold text-3xl text-blue-600">About Sahand Estate</h4>
+      <h4 className="font-bold text-3xl text-blue-600">About Ali Estate</h4>
 
       <p className="text-lg">Sahand Estate is a leading real estate agency that specializes in helping clients buy, sell, and rent properties in the most desirable neighborhoods. Our team of experienced agents is dedicated to providing exceptional service and making the buying and selling process as smooth as possible.</p>
 

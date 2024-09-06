@@ -28,7 +28,7 @@ const Home = () => {
 
       const searchParams = new URLSearchParams({
         offer: "true",
-        limit: 4
+        limit: 5
       }).toString()
 
       console.log(searchParams)
@@ -41,7 +41,7 @@ const Home = () => {
 
       const searchParams = new URLSearchParams({
         type: "rent",
-        limit: 4
+        limit: 5
       }).toString()
 
       console.log(searchParams)
@@ -54,7 +54,7 @@ const Home = () => {
 
       const searchParams = new URLSearchParams({
         type: "sell",
-        limit: 4
+        limit: 5
       }).toString()
 
       console.log(searchParams)
