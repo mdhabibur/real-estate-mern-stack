@@ -163,7 +163,7 @@ const ListingDetails = () => {
         <div className='flex flex-row gap-3'>
           <button className='bg-red-800 px-10 py-1 rounded-lg uppercase font-semibold text-white'>{listing.sellOrRent}</button>
 
-          {listing.offer && (<button className='bg-green-700 px-10 py-1 rounded-lg uppercase font-semibold text-white'>$ {+listing.regularPrice - +listing.discountedPrice} Discount</button>)}
+          {listing.offer && (<button className='bg-green-700 px-10 py-1 rounded-lg uppercase font-semibold text-white'> ${listing.discountedPrice} Discount</button>)}
 
 
         </div>

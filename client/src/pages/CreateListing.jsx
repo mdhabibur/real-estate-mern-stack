@@ -392,7 +392,7 @@ const CreateListing = () => {
                     onChange={handleInputChange}
                     />
 
-                    <span>Discounted price</span>
+                    <span>Discounts</span>
                 
                     </div>
                     )}
