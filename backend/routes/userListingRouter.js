@@ -10,7 +10,7 @@ router.put('/edit/:listingId', validateRequestToken, updatedListing)
 router.delete('/delete/:listingId', validateRequestToken, deleteListing )
 
 //advance search
-router.get('/search', validateRequestToken, searchListings)
+router.get('/search', searchListings)
 
 //single listing 
 router.get('/:listingId', validateRequestToken, getListingDetails)
