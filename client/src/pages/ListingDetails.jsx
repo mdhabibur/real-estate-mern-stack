@@ -236,7 +236,7 @@ const ListingDetails = () => {
                <span className='font-semibold text-blue-700'>{listing?.name}</span>
             </div>
 
-            <textarea name="contactLandlord" id="contactLandlord" className ="p-3 rounded-lg" placeholder='Enter Your Message Here' 
+            <textarea name="contactLandlord" id="contactLandlord" className ="p-3 rounded-lg" placeholder='Enter Your Messages To Contact With Owner' 
             value = {contactMessage}
             onChange={handleContactFormChange}></textarea>
 
