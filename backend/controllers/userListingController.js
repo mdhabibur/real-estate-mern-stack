@@ -241,7 +241,7 @@ export const searchListings = async (req, res, next) => {
 export const getListingDetails = async (req, res, next) => {
 
   try {
-    const listing = await Listing.findById(req.params.listingId)
+    const listing = await Listing.findById(req.params.listingId).populate("user")
 
     if(!listing){
       return next(errorHandler(404, "listing not found"))

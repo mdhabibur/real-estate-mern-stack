@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { errorMsg, loadingMsg, successMsg } from '../utils/messages'
 import { FaMapMarkerAlt, FaBed, FaBath, FaParking, FaChair  } from 'react-icons/fa'
 import { FaShareFromSquare } from "react-icons/fa6";
@@ -30,6 +30,8 @@ const ListingDetails = () => {
 
   const {listingId} = useParams()
   console.log("listing id: ", listingId)
+
+  const [contactMessage, setContactMessage] = useState(null)
 
   // const [formData, setFormData] = useState({
   //     name: '',
@@ -96,6 +98,13 @@ const ListingDetails = () => {
 
   }
 
+  const handleContactFormChange = (e) => {
+    console.log(e.target.value)
+    setContactMessage(e.target.value)
+  }
+
+
+  console.log("contact msg: ", contactMessage)
 
 
   return (
@@ -214,12 +223,30 @@ const ListingDetails = () => {
         </div>
 
         {console.log("current singed in user: " , currentUser?._id?.toString())}
-        {console.log("listing owner: ", listing?.user?.toString())}
+        {console.log("listing owner: ", listing?.user?._id.toString())}
 
-        {currentUser?._id?.toString() !== listing?.user?.toString() && (
-          <div>
+        {currentUser?._id?.toString() !== listing?.user?._id.toString() && (
+          
+          <div className='flex flex-col gap-3'>
 
-            "show contact landlord box"
+            <div className='flex flex-row gap-3'>
+               <p>Contact </p>
+               <span className='font-semibold text-blue-700'>{listing?.user?.username}</span>
+               for 
+               <span className='font-semibold text-blue-700'>{listing?.name}</span>
+            </div>
+
+            <textarea name="contactLandlord" id="contactLandlord" className ="p-3 rounded-lg" placeholder='Enter Your Message Here' 
+            value = {contactMessage}
+            onChange={handleContactFormChange}></textarea>
+
+            <a 
+              href={`mailto:${listing?.user?.email}?subject=${encodeURIComponent(`Regarding ${listing.name}`)}&body=${encodeURIComponent(contactMessage)}`} 
+              className="bg-slate-600 p-3 rounded-lg text-white uppercase text-center"
+            >
+              Send Message
+            </a>
+
 
           </div>
         )}
