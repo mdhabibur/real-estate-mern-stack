@@ -283,7 +283,7 @@ const UpdateListing = () => {
 
         {fetchListingLoading && loadingMsg() }
         {fetchListingError && errorMsg(fetchListingError)}
-        {fetchListingSuccess && successMsg(fetchListingSuccess)}
+        {/* {fetchListingSuccess && successMsg(fetchListingSuccess)} */}
 
         <form onSubmit={handleFormSubmit} className='flex flex-col sm:flex-row gap-3 border rounded-lg shadow-md p-5'>
 

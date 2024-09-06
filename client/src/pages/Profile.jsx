@@ -11,7 +11,7 @@ import { errorMsg, loadingMsg, successMsg } from "../utils/messages";
 import { setTimerOff } from "../redux/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { getListings } from "../redux/listing/listingApi";
-import { setListingTimerOff } from "../redux/listing/listingSlice";
+import { resetListings, setListingTimerOff } from "../redux/listing/listingSlice";
 import ShowListing from "../components/listings/ShowListing";
 
 const Profile = () => {
@@ -166,9 +166,18 @@ const Profile = () => {
 		navigate("/listing/create");
 	};
 
+
+	//first clear the listings as soon as this page mounts which may be available from the previous pages(like in search page from the query result)
+	useEffect(() => {
+		dispatch(resetListings())
+	}, [])
+
 	const showListings = async (e) => {
 		dispatch(getListings({ url: "api/user/listing/get" }));
 	};
+
+
+
 
 	useEffect(() => {
 		//timer object
@@ -305,7 +314,7 @@ const Profile = () => {
 
 			{getListingsLoading && loadingMsg()}
 			{getListingsError && errorMsg(getListingsError)}
-			{getListingsSuccess && successMsg(getListingsSuccess)}
+			{/* {getListingsSuccess && successMsg(getListingsSuccess)} */}
 
 			<div className="border border-slate-200 rounded-lg flex flex-col mt-5 shadow-lg">
 				{getListingsSuccess && (
