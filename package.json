@@ -23,7 +23,8 @@
 	},
 	"scripts": {
 		"dev": "nodemon backend/index.js",
-		"start": "node backend/index.js"
+		"start": "node backend/index.js",
+		"build": "node install && cd client && node install && npm run build"
 	},
 	"repository": {
 		"type": "git",

@@ -6,6 +6,7 @@ import authRouter from './routes/authRouter.js'
 import userProfileRouter from './routes/userProfileRouter.js'
 import userListingRouter from './routes/userListingRouter.js'
 import cookieParser from 'cookie-parser'
+import path from 'path'
 
 const app = express()
 dotenv.config() //load environment variables
@@ -34,14 +35,10 @@ app.use(cookieParser())
 
 
 //define a test route
-app.get("/", (req, res) => {
-    res.send("server running...")
-})
+// app.get("/", (req, res) => {
+//     res.send("server running...")
+// })
 
-const port = process.env.PORT || 5000
-app.listen(port, () => {
-    console.log(`server is running on http://localhost:${port}`)
-})
 
 
 //api
@@ -49,7 +46,26 @@ app.use('/api/user/auth', authRouter)
 app.use('/api/user/profile', userProfileRouter)
 app.use('/api/user/listing', userListingRouter)
 
+//for production 
+if(process.env.NODE_ENV === 'production'){
+    const __dirname = path.resolve() //get current directory location
+    app.use(express.static(path.join(__dirname, '/client/dist'))) //serving static production build 'dist' folder for frontend
 
+    //for any route other that /api route, serve the static files from frontend
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'dist','index.html'))
+
+    })
+
+
+
+}
+
+//so that means the backend index.js is mainly doing everything as server. on render it will have a domain name. and when the domain's normal routes other than api routes are hit, it will serve the 'static' frontend files.and when the '/api/...' routes are hit, it will handle the endpoint api call by controllers.
+
+
+
+//error handling middleware
 app.use((err, req, res, next) => {
 
     const status = err?.status || 500
@@ -66,4 +82,11 @@ app.use((err, req, res, next) => {
 
     })
 
+})
+
+//start the server
+const port = process.env.PORT || 5000
+ //render will automatically put a port in the PORT env variable 
+app.listen(port, () => {
+    console.log(`server is running on http://localhost:${port}`)
 })
